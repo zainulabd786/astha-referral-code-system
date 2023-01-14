@@ -13,19 +13,10 @@
  * Domain Path: /languages
  */
 
- if (!function_exists('write_log')) {
+define('REFERRAL_CODE_META_KEY', 'referral_code');
 
-    function write_log($log)
-    {
-        if (true === WP_DEBUG) {
-            if (is_array($log) || is_object($log)) {
-                error_log(print_r($log, true));
-            } else {
-                error_log($log);
-            }
-        }
-    }
-}
+include (plugin_dir_path(__FILE__) . 'utils.php');
+include (plugin_dir_path(__FILE__) . 'bulk_code_assignment.php');
 
 // Changes Subscriber name to Ambassador
 add_action('init', 'change_role_name');
@@ -43,6 +34,7 @@ function change_role_name() {
 add_filter( 'manage_users_columns', 'new_modify_user_table' );
 function new_modify_user_table( $column ) {
     $column['status'] = 'Status';
+    $column[REFERRAL_CODE_META_KEY] = 'Referral Code';
     return $column;
 }
 
@@ -51,6 +43,8 @@ function new_modify_user_table_row( $val, $column_name, $user_id ) {
     switch ($column_name) {
         case 'status' :
             return get_user_meta( $user_id, 'status', true);
+        case REFERRAL_CODE_META_KEY:
+            return get_user_meta( $user_id, REFERRAL_CODE_META_KEY, true);
         default:
     }
     return $val;
@@ -502,9 +496,9 @@ function as_custom_user_profile_fields( $user ){
             <td>+<?= get_user_meta($user->ID, 'country_code', true) ?> <?= get_user_meta($user->ID, 'mobile_number', true) ?></td>
         </tr>
         <tr>
-            <th><label for="referral_code">Referral code</label></th>
+            <th><label for="<?= REFERRAL_CODE_META_KEY ?>">Referral code</label></th>
             <td>
-                <input type="text" class="input-text form-control" name="referral_code" id="referral_code" value="<?= get_user_meta($user->ID, 'referral_code', true) ?>" />
+                <input type="text" class="input-text form-control" name="<?= REFERRAL_CODE_META_KEY ?>" id="<?= REFERRAL_CODE_META_KEY ?>" value="<?= get_user_meta($user->ID, REFERRAL_CODE_META_KEY, true) ?>" />
             </td>
         </tr>
     </table><?php
@@ -512,6 +506,6 @@ function as_custom_user_profile_fields( $user ){
 
 add_action( 'edit_user_profile_update', 'as_save_custom_user_profile_fields' );
 function as_save_custom_user_profile_fields( $user_id ){
-    $custom_data = $_POST['referral_code'];
-    update_user_meta( $user_id, 'referral_code', $custom_data );
+    $custom_data = $_POST[REFERRAL_CODE_META_KEY];
+    update_user_meta( $user_id, REFERRAL_CODE_META_KEY, $custom_data );
 }
