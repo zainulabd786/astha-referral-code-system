@@ -39,3 +39,13 @@ function convert_csv_to_arr($csv)
 }
 
 
+function get_admin_edit_user_link($user_id){
+    if (get_current_user_id() == $user_id)
+        $edit_link = get_edit_profile_url($user_id);
+    else
+        $edit_link = add_query_arg('user_id', $user_id, self_admin_url('user-edit.php'));
+        
+    return $edit_link;
+}
+
+
