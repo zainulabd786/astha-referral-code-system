@@ -51,6 +51,9 @@ jQuery(document).ready(function ($) {
       table.draw();
    });
 
+   // style user login form
+   $("#loginform").find("input.input").addClass("form-control")
+   $("#loginform").find("input.button").addClass("btn btn-primary")
 
 
 });
