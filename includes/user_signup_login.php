@@ -1,4 +1,3 @@
-
 <?php
 add_shortcode('as_signup_form', 'as_signup_form');
 function as_signup_form($atts){
