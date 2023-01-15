@@ -83,12 +83,12 @@ add_filter('bulk_actions-users', function($bulk_actions) {
 add_filter('handle_bulk_actions-users', function($redirect_url, $action, $user_ids) {
 	if ($action == STATUS_APPROVED) {
 		foreach ($user_ids as $user_id) {
-            update_user_meta($user_id, STATUS_META_KEY, STATUS_APPROVED);
+            assign_code_to_user($user_id, "", STATUS_APPROVED);
 		}
 		$redirect_url = add_query_arg(STATUS_APPROVED, count($user_ids), $redirect_url);
 	} elseif ($action == STATUS_REJECTED) {
 		foreach ($user_ids as $user_id) {
-            update_user_meta($user_id, STATUS_META_KEY, STATUS_REJECTED);
+            assign_code_to_user($user_id, "", STATUS_REJECTED);
 		}
 		$redirect_url = add_query_arg(STATUS_REJECTED, count($user_ids), $redirect_url);
 	}

@@ -315,7 +315,7 @@ function as_user_registration(){
             "You are Successfully Registered on " . get_bloginfo("name"),
             "You are Successfully Registered on " .
                 get_bloginfo("name") .
-                " Please wait for admin approval and code assignment."
+                ". Please wait for admin approval and code assignment."
         );
         wp_redirect($_POST["redirect_url"]. '?message=Successfully Registered!&status=success');
     } else{

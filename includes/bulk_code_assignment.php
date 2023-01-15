@@ -43,9 +43,8 @@ function as_start_csv_import(){
     $upload_statuses = [];
     foreach ($rows as $row){
         $user = get_user_by( 'email', $row['email'] );
-        $update_status = update_user_meta($user->ID, REFERRAL_CODE_META_KEY, $row['code']);
-        write_log( $update_status);
-        array_push($upload_statuses, $update_status === true ? 'success' : $update_status);
+        $update_status = assign_code_to_user($user->ID, $row['code'], STATUS_APPROVED);
+        array_push($upload_statuses, $update_status);
     }
     $number_of_updated_users = array_filter($upload_statuses, function($i) {
         return $i === 'success';

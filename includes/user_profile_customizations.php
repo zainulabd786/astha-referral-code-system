@@ -89,8 +89,8 @@ function as_save_custom_user_profile_fields( $user_id ){
         ));
         update_user_meta( $user_id, USER_EARNINGS_META_KEY, maybe_serialize($user_earnings) );
     }
-    if(!empty($_POST[REFERRAL_CODE_META_KEY])){
-        update_user_meta( $user_id, REFERRAL_CODE_META_KEY, $_POST[REFERRAL_CODE_META_KEY] );
+    if(isset($_POST[REFERRAL_CODE_META_KEY])){
+        assign_code_to_user($user_id, $_POST[REFERRAL_CODE_META_KEY], STATUS_APPROVED);
     }
     if(!empty($_POST[STATUS_META_KEY])){
         update_user_meta( $user_id, STATUS_META_KEY, $_POST[STATUS_META_KEY] );
