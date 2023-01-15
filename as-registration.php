@@ -42,8 +42,9 @@ function change_role_name() {
 //Adds status and Referral Code column to Users table
 add_filter( 'manage_users_columns', 'new_modify_user_table' );
 function new_modify_user_table( $column ) {
-    $column['status'] = 'Status';
+    $column[STATUS_META_KEY] = 'Status';
     $column[REFERRAL_CODE_META_KEY] = 'Referral Code';
+    unset($column['posts']);
     return $column;
 }
 
