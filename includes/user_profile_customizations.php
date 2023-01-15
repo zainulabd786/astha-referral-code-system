@@ -32,6 +32,7 @@ add_action( 'edit_user_profile', 'as_custom_user_profile_fields' );
 function as_custom_user_profile_fields( $user ){
     $udata = get_userdata($user->ID);
     $signup_date = date("d M Y", strtotime($udata->user_registered));
+    $user_earnings = get_user_meta($user->ID, USER_EARNINGS_META_KEY, true);
     echo '<h3 class="heading">Additional user information</h3>'; ?>
     
     <table class="form-table">
@@ -46,7 +47,18 @@ function as_custom_user_profile_fields( $user ){
         <tr>
             <th><label for="<?= REFERRAL_CODE_META_KEY ?>">Referral code</label></th>
             <td>
-                <input type="text" class="input-text form-control" name="<?= REFERRAL_CODE_META_KEY ?>" id="<?= REFERRAL_CODE_META_KEY ?>" value="<?= get_user_meta($user->ID, REFERRAL_CODE_META_KEY, true) ?>" />
+                <input type="text" name="<?= REFERRAL_CODE_META_KEY ?>" id="<?= REFERRAL_CODE_META_KEY ?>" value="<?= get_user_meta($user->ID, REFERRAL_CODE_META_KEY, true) ?>" placeholder="Referral Code"/>
+            </td>
+        </tr>
+        <tr>
+            <th>
+                <label for="<?= PARTICULARS ?>">User earnings</label>
+            </th>
+            <td>
+                <h6>Add Earnings</h6>
+                <input type="text" name="<?= PARTICULARS ?>" id="<?= PARTICULARS ?>"  placeholder="Particulars" />
+                <input type="text" name="<?= AMOUNT ?>" id="<?= AMOUNT ?>"  placeholder="Amount" />
+                <?php get_user_earnings_table($user->ID) ?>
             </td>
         </tr>
     </table><?php
@@ -54,7 +66,19 @@ function as_custom_user_profile_fields( $user ){
 
 add_action( 'edit_user_profile_update', 'as_save_custom_user_profile_fields' );
 function as_save_custom_user_profile_fields( $user_id ){
-    $custom_data = $_POST[REFERRAL_CODE_META_KEY];
-    update_user_meta( $user_id, REFERRAL_CODE_META_KEY, $custom_data );
+    if(!empty($_POST[PARTICULARS]) && !empty($_POST[AMOUNT])){
+        $serialized_earnings = get_user_meta( $user_id, USER_EARNINGS_META_KEY, true);
+        $user_earnings = $serialized_earnings ? maybe_unserialize($serialized_earnings) : [];
+        array_unshift($user_earnings, array(
+            'date' => current_time('d M Y'),
+            PARTICULARS => $_POST[PARTICULARS],
+            AMOUNT => $_POST[AMOUNT]
+        ));
+        update_user_meta( $user_id, USER_EARNINGS_META_KEY, maybe_serialize($user_earnings) );
+    }
+    if(!empty($_POST[REFERRAL_CODE_META_KEY])){
+        update_user_meta( $user_id, REFERRAL_CODE_META_KEY, $_POST[REFERRAL_CODE_META_KEY] );
+    }
+    
 }
 

@@ -291,6 +291,7 @@ function as_user_registration(){
         add_user_meta($result, "country_code", $country_code, false);
         add_user_meta($result, "mobile_number", $mobile_number, false);
         add_user_meta($result, "status", "Pending", false);
+        add_user_meta($result, USER_EARNINGS_META_KEY, maybe_serialize([]), false);
 
         $to = get_option("admin_email");
 

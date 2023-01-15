@@ -1,3 +1,32 @@
 .as-country-code-dropdown{
     max-width: 175px;
 }
+
+.dataTables_wrapper{
+    margin: 5px 0;
+    border: 1px solid;
+    padding: 5px;
+}
+
+.dataTables_wrapper .dataTables_length select{
+    min-width: 60px;
+}
+
+.date-filters-wrap{
+    float: right;
+    position: relative;
+    top: -10px;
+}
+
+.date-filters-wrap label{
+    display: block;
+    font-size: 10px;
+}
+
+.date-filters-wrap .inputs {
+    display: flex;
+}
+
+.date-filters-wrap .inputs input {
+    max-width: 100px;
+}

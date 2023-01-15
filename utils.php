@@ -48,4 +48,38 @@ function get_admin_edit_user_link($user_id){
     return $edit_link;
 }
 
+function get_user_earnings_table($user_id){
+    $earnings = maybe_unserialize(get_user_meta($user_id, USER_EARNINGS_META_KEY, true)); ?>
+    <div class="date-filters-wrap">
+        <label>Show records</label>
+        <div class="inputs">
+            <div>
+                <input type="text" id="min" name="min" placeholder="From date">
+            </div>
+            <div>
+                <input type="text" id="max" name="max" placeholder="To date">
+            </div>
+        </div>
+    </div>
+    <table id="earnings_table">
+        <thead>
+            <th>Date</th>
+            <th>Particulars</th>
+            <th>Amount</th>
+        </thead>
+        <tbody><?php
+            if($earnings){
+                foreach($earnings as $earning){ ?>
+                    <tr>
+                        <td><?= isset($earning['date']) ? $earning['date'] : '' ?></td>
+                        <td><?= isset($earning[PARTICULARS]) ? $earning[PARTICULARS] : '' ?></td>
+                        <td><?= isset($earning[AMOUNT]) ? $earning[AMOUNT] : '' ?></td>
+                    </tr><?php
+                }
+                
+            } ?>
+        </tbody>
+    </table><?php
+}
+
 

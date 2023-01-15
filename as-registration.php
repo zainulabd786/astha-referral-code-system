@@ -14,6 +14,9 @@
  */
 
 define('REFERRAL_CODE_META_KEY', 'referral_code');
+define('USER_EARNINGS_META_KEY', 'user_earnings');
+define('AMOUNT', 'amount');
+define('PARTICULARS', 'particulars');
 
 include (plugin_dir_path(__FILE__) . 'utils.php');
 include (plugin_dir_path(__FILE__) . 'includes/bulk_code_assignment.php');
@@ -100,8 +103,33 @@ add_action('wp_enqueue_scripts', 'enqueue_scripts');
 add_action('admin_enqueue_scripts', 'enqueue_scripts');
 function enqueue_scripts(){
     wp_enqueue_script('jquery', 'https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js', array(''), '3.6.1', true);
-    wp_enqueue_script('as-js', plugins_url('/js/script.js', __FILE__), array('jquery'));
+    wp_enqueue_script('datatable-js', 'https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js', array('jquery'));
+    wp_enqueue_script('datatable-buttons-js', 'https://cdn.datatables.net/buttons/2.3.2/js/dataTables.buttons.min.js', array('jquery', 'datatable-js'));
+    wp_enqueue_script('datatable-js-zip-js', 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js', array(
+        'jquery', 
+        'datatable-js', 
+        'datatable-buttons-js'
+    ));
+    wp_enqueue_script('datatable-buttons-html5-js', 'https://cdn.datatables.net/buttons/2.3.2/js/buttons.html5.min.js', array(
+        'jquery', 
+        'datatable-js', 
+        'datatable-buttons-js'
+    ));
+    wp_enqueue_script('jq-ui-datepicker-js', plugins_url('/js/jquery-ui-1.13.2.datepicker/jquery-ui.min.js', __FILE__), array(
+        'jquery',
+    ), true);
+    wp_enqueue_script('as-js', plugins_url('/js/script.js', __FILE__), array(
+        'jquery', 
+        'datatable-js', 
+        'datatable-buttons-js', 
+        'datatable-js-zip-js', 
+        'datatable-buttons-html5-js',
+        'jq-ui-datepicker-js'
+    ), true);
+    
     wp_enqueue_style('style-css', plugins_url('/css/style.css', __FILE__));
+    wp_enqueue_style('jq-ui-datepicker-css', plugins_url('/js/jquery-ui-1.13.2.datepicker/jquery-ui.min.css', __FILE__));
     wp_enqueue_style('bootstrap-css', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css');
+    wp_enqueue_style('datatable-css', 'https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css');
 }
 

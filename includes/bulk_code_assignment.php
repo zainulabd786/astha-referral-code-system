@@ -14,7 +14,7 @@ function as_register_bulk_assignment_submenu_page() {
 function bulk_assignment_page_callback() {
     if (!current_user_can('manage_options')) wp_die(__('You do not have sufficient permissions to access this page.'));
     $updated_users = !empty($_GET['updated_users']) ? $_GET['updated_users'] : ''; ?>
-    <h2><?= get_admin_page_title() ?></h2><?php
+    <h3><?= get_admin_page_title() ?></h3><?php
     if ($updated_users > 0){ ?>
         <div class="update-nag notice notice-success" role="alert">
             CSV successfully imported! <b><?= $updated_users ?></b> users updated successfully!
