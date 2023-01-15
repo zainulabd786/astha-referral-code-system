@@ -17,6 +17,10 @@ define('REFERRAL_CODE_META_KEY', 'referral_code');
 define('USER_EARNINGS_META_KEY', 'user_earnings');
 define('AMOUNT', 'amount');
 define('PARTICULARS', 'particulars');
+define('STATUS_META_KEY', 'status');
+define('STATUS_APPROVED', 'Approved');
+define('STATUS_REJECTED', 'Rejected');
+define('STATUS_PENDING', 'Pending');
 
 include (plugin_dir_path(__FILE__) . 'utils.php');
 include (plugin_dir_path(__FILE__) . 'includes/bulk_code_assignment.php');
@@ -72,21 +76,21 @@ function project_pre_user_search( $query ) {
 
 //Adds Approve Users action to bulk actions dropdown
 add_filter('bulk_actions-users', function($bulk_actions) {
-	$bulk_actions['approve-users'] = __('Approve Users', 'as-domain');
-	$bulk_actions['reject-users'] = __('Reject Users', 'as-domain');
+	$bulk_actions[STATUS_APPROVED] = __('Approve Users', 'as-domain');
+	$bulk_actions[STATUS_REJECTED] = __('Reject Users', 'as-domain');
 	return $bulk_actions;
 });
 add_filter('handle_bulk_actions-users', function($redirect_url, $action, $user_ids) {
-	if ($action == 'approve-users') {
+	if ($action == STATUS_APPROVED) {
 		foreach ($user_ids as $user_id) {
-            update_user_meta($user_id, 'status', 'Approved');
+            update_user_meta($user_id, STATUS_META_KEY, STATUS_APPROVED);
 		}
-		$redirect_url = add_query_arg('approve-users', count($user_ids), $redirect_url);
-	} elseif ($action == 'reject-users') {
+		$redirect_url = add_query_arg(STATUS_APPROVED, count($user_ids), $redirect_url);
+	} elseif ($action == STATUS_REJECTED) {
 		foreach ($user_ids as $user_id) {
-            update_user_meta($user_id, 'status', 'Rejecteed');
+            update_user_meta($user_id, STATUS_META_KEY, STATUS_REJECTED);
 		}
-		$redirect_url = add_query_arg('reject-users', count($user_ids), $redirect_url);
+		$redirect_url = add_query_arg(STATUS_REJECTED, count($user_ids), $redirect_url);
 	}
 	return $redirect_url;
 }, 10, 3);
