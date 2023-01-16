@@ -21,11 +21,40 @@ define('STATUS_META_KEY', 'status');
 define('STATUS_APPROVED', 'Approved');
 define('STATUS_REJECTED', 'Rejected');
 define('STATUS_PENDING', 'Pending');
+define('AMBASSADOR_DASHBOARD_PAGE_TITLE', 'Ambassador Dashboard');
 
 include (plugin_dir_path(__FILE__) . 'utils.php');
 include (plugin_dir_path(__FILE__) . 'includes/bulk_code_assignment.php');
 include (plugin_dir_path(__FILE__) . 'includes/user_signup_login.php');
 include (plugin_dir_path(__FILE__) . 'includes/user_profile_customizations.php');
+
+register_activation_hook(__FILE__, 'on_as_plugin_activation');
+function on_as_plugin_activation() {
+
+    // Insert the post into the database
+    wp_insert_post( array(
+        'post_title'    => wp_strip_all_tags( AMBASSADOR_DASHBOARD_PAGE_TITLE ),
+        'post_status'   => 'publish',
+        'post_type'     => 'page',
+      ) );
+}
+
+add_filter( 'page_template', 'wp_page_template' );
+function wp_page_template( $page_template ){
+    if ( is_page( AMBASSADOR_DASHBOARD_PAGE_TITLE ) ) {
+        $page_template = plugin_dir_path( __FILE__ ) . 'ambassador-dashboard-template.php';
+    }
+    return $page_template;
+}
+
+
+register_deactivation_hook( __FILE__, 'on_as_plugin_deactivation' );
+function on_as_plugin_deactivation() {
+
+    $page_id = get_page_by_title(AMBASSADOR_DASHBOARD_PAGE_TITLE)->ID;
+    wp_delete_post($page_id);
+
+}
 
 // Changes Subscriber name to Ambassador
 add_action('init', 'change_role_name');
