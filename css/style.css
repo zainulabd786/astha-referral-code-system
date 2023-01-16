@@ -30,3 +30,18 @@
 .date-filters-wrap .inputs input {
     max-width: 100px;
 }
+
+
+/* Ambassador dashboard template */
+.as-ambassador-dashboard-page header,
+.as-ambassador-dashboard-page footer, 
+.as-ambassador-dashboard-page aside.widget-area,
+.as-ambassador-dashboard-page #wp-admin-bar-root-default,
+.as-ambassador-dashboard-page #wp-admin-bar-search {
+    display: none;
+}
+
+
+.as-ambassador-dashboard-page .site-content{
+    padding: 0;
+}

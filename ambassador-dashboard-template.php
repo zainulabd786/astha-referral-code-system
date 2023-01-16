@@ -1,4 +1,13 @@
-<?php
-get_header();
+<?php 
+    if(!is_user_logged_in()){
+        wp_die('You are not allowed to access this page');
+    }
 
-get_footer();
+    get_header();   
+?>
+
+<div class="p-4">
+    <?= do_shortcode('[as_earnings_table]') ?>
+</div>
+
+<?php get_footer(); ?>

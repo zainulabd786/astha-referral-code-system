@@ -22,6 +22,7 @@ define('STATUS_APPROVED', 'Approved');
 define('STATUS_REJECTED', 'Rejected');
 define('STATUS_PENDING', 'Pending');
 define('AMBASSADOR_DASHBOARD_PAGE_TITLE', 'Ambassador Dashboard');
+define('AMBASSADOR_DASHBOARD_PAGE_SLUG', 'as-ambassador-dashboard');
 
 include (plugin_dir_path(__FILE__) . 'utils.php');
 include (plugin_dir_path(__FILE__) . 'includes/bulk_code_assignment.php');
@@ -36,22 +37,31 @@ function on_as_plugin_activation() {
         'post_title'    => wp_strip_all_tags( AMBASSADOR_DASHBOARD_PAGE_TITLE ),
         'post_status'   => 'publish',
         'post_type'     => 'page',
+        'post_name'     => AMBASSADOR_DASHBOARD_PAGE_SLUG
       ) );
 }
 
-add_filter( 'page_template', 'wp_page_template' );
-function wp_page_template( $page_template ){
-    if ( is_page( AMBASSADOR_DASHBOARD_PAGE_TITLE ) ) {
+add_filter( 'page_template', 'as_ambassador_dashboard_page_template' );
+function as_ambassador_dashboard_page_template( $page_template ){
+    if ( is_page( AMBASSADOR_DASHBOARD_PAGE_SLUG ) ) {
         $page_template = plugin_dir_path( __FILE__ ) . 'ambassador-dashboard-template.php';
     }
     return $page_template;
+}
+
+add_filter('body_class', 'as_ambassador_dashboard_body_class');
+function as_ambassador_dashboard_body_class($classes) {
+    if ( is_page( AMBASSADOR_DASHBOARD_PAGE_SLUG ) ) {
+        $classes[] = 'as-ambassador-dashboard-page';
+    }
+    return $classes;
 }
 
 
 register_deactivation_hook( __FILE__, 'on_as_plugin_deactivation' );
 function on_as_plugin_deactivation() {
 
-    $page_id = get_page_by_title(AMBASSADOR_DASHBOARD_PAGE_TITLE)->ID;
+    $page_id = get_page_by_path(AMBASSADOR_DASHBOARD_PAGE_SLUG)->ID;
     wp_delete_post($page_id);
 
 }
@@ -167,3 +177,24 @@ function enqueue_scripts(){
     wp_enqueue_style('datatable-css', 'https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css');
 }
 
+add_shortcode('as_earnings_table', 'as_earnings_table');
+function as_earnings_table($atts){
+    $atts = shortcode_atts(array(), $atts, 'as_earnings_table');
+    $user_id = get_current_user_id();
+    if($user_id){
+        return get_user_earnings_table($user_id);
+    }
+    return "Invalid User ID";
+}
+
+add_action('wp_logout','auto_redirect_after_logout');
+function auto_redirect_after_logout(){
+  wp_safe_redirect( home_url() );
+  exit;
+}
+
+add_filter('login_redirect', 'admin_default_page');
+function admin_default_page() {
+    return home_url('/'.AMBASSADOR_DASHBOARD_PAGE_SLUG);
+  }
+  
