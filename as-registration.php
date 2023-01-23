@@ -23,15 +23,23 @@ define('STATUS_REJECTED', 'Rejected');
 define('STATUS_PENDING', 'Pending');
 define('AMBASSADOR_DASHBOARD_PAGE_TITLE', 'Ambassador Dashboard');
 define('AMBASSADOR_DASHBOARD_PAGE_SLUG', 'as-ambassador-dashboard');
+define('AMBASSADOR_ADMIN_ROLE', 'ambassador_admin');
 
 include (plugin_dir_path(__FILE__) . 'utils.php');
 include (plugin_dir_path(__FILE__) . 'includes/bulk_code_assignment.php');
 include (plugin_dir_path(__FILE__) . 'includes/user_signup_login.php');
 include (plugin_dir_path(__FILE__) . 'includes/user_profile_customizations.php');
+include (plugin_dir_path(__FILE__) . 'includes/ambassador_admin_dashboard.php');
 
 register_activation_hook(__FILE__, 'on_as_plugin_activation');
 function on_as_plugin_activation() {
-
+    add_role( AMBASSADOR_ADMIN_ROLE, 'Ambassador Admin', array(
+        'edit_users' => true,
+        'list_users' => true,
+        'delete_users' => true,
+        'edit_dashboard' => true,
+        'read' => true
+    ) );
     // Insert the post into the database
     wp_insert_post( array(
         'post_title'    => wp_strip_all_tags( AMBASSADOR_DASHBOARD_PAGE_TITLE ),
@@ -63,6 +71,7 @@ function on_as_plugin_deactivation() {
 
     $page_id = get_page_by_path(AMBASSADOR_DASHBOARD_PAGE_SLUG)->ID;
     wp_delete_post($page_id);
+    remove_role(AMBASSADOR_ADMIN_ROLE);
 
 }
 
@@ -196,5 +205,4 @@ function auto_redirect_after_logout(){
 add_filter('login_redirect', 'admin_default_page');
 function admin_default_page() {
     return home_url('/'.AMBASSADOR_DASHBOARD_PAGE_SLUG);
-  }
-  
+}

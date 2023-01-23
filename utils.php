@@ -50,7 +50,7 @@ function get_admin_edit_user_link($user_id){
 
 function get_user_earnings_table($user_id){
     $earnings = maybe_unserialize(get_user_meta($user_id, USER_EARNINGS_META_KEY, true)); ?>
-    <div class="date-filters-wrap">
+    <!-- <div class="date-filters-wrap">
         <label>Show records</label>
         <div class="inputs">
             <div>
@@ -60,10 +60,9 @@ function get_user_earnings_table($user_id){
                 <input type="text" id="max" name="max" placeholder="To date">
             </div>
         </div>
-    </div>
+    </div> -->
     <table id="earnings_table">
         <thead>
-            <th>Date</th>
             <th>No. of Referrals</th>
             <th>Amount</th>
         </thead>
@@ -71,7 +70,6 @@ function get_user_earnings_table($user_id){
             if($earnings){
                 foreach($earnings as $earning){ ?>
                     <tr>
-                        <td><?= isset($earning['date']) ? $earning['date'] : '' ?></td>
                         <td><?= isset($earning[PARTICULARS]) ? $earning[PARTICULARS] : '' ?></td>
                         <td><?= isset($earning[AMOUNT]) ? $earning[AMOUNT] : '' ?></td>
                     </tr><?php
@@ -104,4 +102,3 @@ function assign_code_to_user($user_id, $code, $status){
         return "success";
     } else return "failed";
 }
-

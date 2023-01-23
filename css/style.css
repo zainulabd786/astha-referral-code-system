@@ -41,7 +41,10 @@
     display: none;
 }
 
-
 .as-ambassador-dashboard-page .site-content{
     padding: 0;
+}
+
+.ambassador-insights-table td{
+    padding: 5px
 }

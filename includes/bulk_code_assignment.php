@@ -5,14 +5,14 @@ function as_register_bulk_assignment_submenu_page() {
 		'users.php',
         'Upload CSV',
         'Bulk code assignment',
-        'manage_options',
+        'edit_users',
         'bulk_assignment',
         'bulk_assignment_page_callback',
     );
 }
 
 function bulk_assignment_page_callback() {
-    if (!current_user_can('manage_options')) wp_die(__('You do not have sufficient permissions to access this page.'));
+    if (!current_user_can('edit_users')) wp_die(__('You do not have sufficient permissions to access this page.'));
     $updated_users = !empty($_GET['updated_users']) ? $_GET['updated_users'] : ''; ?>
     <h3><?= get_admin_page_title() ?></h3><?php
     if ($updated_users > 0){ ?>
