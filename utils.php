@@ -64,7 +64,7 @@ function get_user_earnings_table($user_id){
     <table id="earnings_table">
         <thead>
             <th>Date</th>
-            <th>Particulars</th>
+            <th>No. of Referrals</th>
             <th>Amount</th>
         </thead>
         <tbody><?php

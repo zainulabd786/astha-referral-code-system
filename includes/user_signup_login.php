@@ -20,6 +20,16 @@ function as_signup_form($atts){
             <?php wp_nonce_field("as_user_registration_verify"); ?>
 
             <div class="mb-3">
+                <label for="first_name" class="form-label">First Name</label>
+                <input type="text" name="first_name" class="form-control" id="first_name" placeholder="First Name" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="last_name" class="form-label">Last Name</label>
+                <input type="text" name="last_name" class="form-control" id="last_name" placeholder="Last Name" required>
+            </div>
+
+            <div class="mb-3">
                 <label for="email" class="form-label">Email address</label>
                 <input type="email" name="email" class="form-control" id="email" placeholder="name@example.com" required>
             </div>
@@ -59,7 +69,7 @@ function as_signup_form($atts){
                         <option data-countryCode="BI" value="257">Burundi (+257)</option>
                         <option data-countryCode="KH" value="855">Cambodia (+855)</option>
                         <option data-countryCode="CM" value="237">Cameroon (+237)</option>
-                        <option data-countryCode="CA" value="1">Canada (+1)</option>
+                        <!-- <option data-countryCode="CA" value="1">Canada (+1)</option> -->
                         <option data-countryCode="CV" value="238">Cape Verde Islands (+238)</option>
                         <option data-countryCode="KY" value="1345">Cayman Islands (+1345)</option>
                         <option data-countryCode="CF" value="236">Central African Republic (+236)</option>
@@ -113,7 +123,7 @@ function as_signup_form($atts){
                         <option data-countryCode="HK" value="852">Hong Kong (+852)</option>
                         <option data-countryCode="HU" value="36">Hungary (+36)</option>
                         <option data-countryCode="IS" value="354">Iceland (+354)</option>
-                        <option data-countryCode="IN" value="91" selected>India (+91)</option>
+                        <option data-countryCode="IN" value="91">India (+91)</option>
                         <option data-countryCode="ID" value="62">Indonesia (+62)</option>
                         <option data-countryCode="IR" value="98">Iran (+98)</option>
                         <option data-countryCode="IQ" value="964">Iraq (+964)</option>
@@ -229,7 +239,7 @@ function as_signup_form($atts){
                         <option data-countryCode="UA" value="380">Ukraine (+380)</option>
                         <option data-countryCode="AE" value="971">United Arab Emirates (+971)</option>
                         <option data-countryCode="UY" value="598">Uruguay (+598)</option>
-                        <!-- <option data-countryCode="US" value="1">USA (+1)</option> -->
+                        <option data-countryCode="US" value="1" selected>USA (+1)</option>
                         <option data-countryCode="UZ" value="7">Uzbekistan (+7)</option>
                         <option data-countryCode="VU" value="678">Vanuatu (+678)</option>
                         <option data-countryCode="VA" value="379">Vatican City (+379)</option>
@@ -277,11 +287,15 @@ function as_user_registration(){
     $country_code = $_POST["country_code"];
     $mobile_number = $_POST["mobile_number"];
     $password = $_POST["password"];
+    $first_name = $_POST["first_name"];
+    $last_name = $_POST["last_name"];
 
     $args = [
         "user_email" => $email,
         "user_pass" => $password,
         "user_login" => $email,
+        "first_name" => $first_name,
+        "last_name" => $last_name,
         "user_registered" => date("Y-m-d H:i:s"),
     ];
     $result = wp_insert_user($args);
