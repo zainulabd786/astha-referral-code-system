@@ -15,8 +15,8 @@
 
 define('REFERRAL_CODE_META_KEY', 'referral_code');
 define('USER_EARNINGS_META_KEY', 'user_earnings');
-define('AMOUNT', 'amount');
-define('PARTICULARS', 'particulars');
+define('AMOUNT', 'amount'); //This has been changed to No. of referrals on UI
+define('PARTICULARS', 'particulars'); //This has been changed to Date duration on UI
 define('STATUS_META_KEY', 'status');
 define('STATUS_APPROVED', 'Approved');
 define('STATUS_REJECTED', 'Rejected');
@@ -198,11 +198,21 @@ function as_earnings_table($atts){
 
 add_action('wp_logout','auto_redirect_after_logout');
 function auto_redirect_after_logout(){
-  wp_safe_redirect( home_url() );
-  exit;
+        wp_safe_redirect( home_url() );
+        exit;
 }
 
-add_filter('login_redirect', 'admin_default_page');
-function admin_default_page() {
-    return home_url('/'.AMBASSADOR_DASHBOARD_PAGE_SLUG);
+
+add_filter( 'login_redirect', 'subscriber_redirect', 10, 3 );
+function subscriber_redirect( $redirect_to, $request, $user ) {
+    //is there a user to check?
+    if (isset($user->roles) && is_array($user->roles)) {
+        //check for subscribers
+        if (in_array('subscriber', $user->roles)) {
+            // redirect them to another URL, in this case, the homepage 
+            $redirect_to =  home_url('/'.AMBASSADOR_DASHBOARD_PAGE_SLUG);
+        } 
+    } 
+
+    return $redirect_to;
 }

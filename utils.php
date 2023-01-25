@@ -63,8 +63,8 @@ function get_user_earnings_table($user_id){
     </div> -->
     <table id="earnings_table">
         <thead>
+            <th>Date Duration</th>
             <th>No. of Referrals</th>
-            <th>Amount</th>
         </thead>
         <tbody><?php
             if($earnings){

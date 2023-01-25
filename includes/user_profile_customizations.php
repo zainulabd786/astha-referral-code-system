@@ -69,8 +69,8 @@ function as_custom_user_profile_fields( $user ){
             </th>
             <td>
                 <h6>Add Earnings</h6>
-                <input type="text" name="<?= PARTICULARS ?>" id="<?= PARTICULARS ?>"  placeholder="No. of Referrals" <?= empty($referral_code) ? "disabled" : '' ?> />
-                <input type="text" name="<?= AMOUNT ?>" id="<?= AMOUNT ?>"  placeholder="Amount" <?= empty($referral_code) ? "disabled" : '' ?> />
+                <input type="text" name="<?= PARTICULARS ?>" id="<?= PARTICULARS ?>"  placeholder="Date duration" <?= empty($referral_code) ? "disabled" : '' ?> />
+                <input type="text" name="<?= AMOUNT ?>" id="<?= AMOUNT ?>"  placeholder="No. of referrals" <?= empty($referral_code) ? "disabled" : '' ?> />
                 <?php get_user_earnings_table($user->ID) ?>
             </td>
         </tr>
@@ -88,12 +88,13 @@ function as_save_custom_user_profile_fields( $user_id ){
         ));
         update_user_meta( $user_id, USER_EARNINGS_META_KEY, maybe_serialize($user_earnings) );
     }
-    if(isset($_POST[REFERRAL_CODE_META_KEY])){
-        assign_code_to_user($user_id, $_POST[REFERRAL_CODE_META_KEY], STATUS_APPROVED);
+    if(isset($_POST[REFERRAL_CODE_META_KEY]) || isset($_POST[STATUS_META_KEY])){
+        assign_code_to_user($user_id, $_POST[REFERRAL_CODE_META_KEY], $_POST[STATUS_META_KEY]);
     }
-    if(!empty($_POST[STATUS_META_KEY])){
-        update_user_meta( $user_id, STATUS_META_KEY, $_POST[STATUS_META_KEY] );
-    }
+    // if(!empty($_POST[STATUS_META_KEY])){
+    //     // update_user_meta( $user_id, STATUS_META_KEY, $_POST[STATUS_META_KEY] );
+    //     assign_code_to_user($user_id, "", $_POST[STATUS_META_KEY]);
+    // }
     
 }
 
