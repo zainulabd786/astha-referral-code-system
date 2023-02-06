@@ -25,6 +25,7 @@ define('AMBASSADOR_DASHBOARD_PAGE_TITLE', 'Ambassador Dashboard');
 define('AMBASSADOR_DASHBOARD_PAGE_SLUG', 'as-ambassador-dashboard');
 define('AMBASSADOR_ADMIN_ROLE', 'ambassador_admin');
 
+include (plugin_dir_path(__FILE__) . 'includes/email_templates.php');
 include (plugin_dir_path(__FILE__) . 'utils.php');
 include (plugin_dir_path(__FILE__) . 'includes/bulk_code_assignment.php');
 include (plugin_dir_path(__FILE__) . 'includes/user_signup_login.php');

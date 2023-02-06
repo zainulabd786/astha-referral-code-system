@@ -3,7 +3,7 @@ add_shortcode('as_signup_form', 'as_signup_form');
 function as_signup_form($atts){
 
     global $post;
-
+    
     ob_start();
     $atts = shortcode_atts(array(), $atts, 'signup_form');
     if (!empty($_GET['message']) && !empty($_GET["status"]) ) { ?>
@@ -282,7 +282,7 @@ add_action("admin_post_nopriv_as_user_registration", "as_user_registration");
 add_action("admin_post_as_user_registration", "as_user_registration");
 function as_user_registration(){
     check_admin_referer("as_user_registration_verify");
-
+    global $signup_email_template;
     $email = $_POST["email"];
     $country_code = $_POST["country_code"];
     $mobile_number = $_POST["mobile_number"];
@@ -306,7 +306,11 @@ function as_user_registration(){
         add_user_meta($result, "status", "Pending", false);
         add_user_meta($result, USER_EARNINGS_META_KEY, maybe_serialize([]), false);
 
-        $to = get_option("admin_email");
+        $ambassadors = get_users( array( 'role' => AMBASSADOR_ADMIN_ROLE ) );
+        $admin_emails = [];
+        foreach ( $ambassadors as $ambassador ) { 
+            array_push($admin_emails, $ambassador->user_email);
+        }
 
         $subject = "New User registration on " . get_bloginfo("name");
         $body =
@@ -321,14 +325,16 @@ function as_user_registration(){
             "View more details at " .
             get_admin_edit_user_link($result);
         $headers = ["Content-Type: text/html; charset=UTF-8"];
-        wp_mail($to, $subject, $body, $headers);
+        $admin_email_response = wp_mail($admin_emails, $subject, $body, $headers);
+        $user_mail_subject = str_replace("{ambassador_name}", $first_name." ".$last_name, $signup_email_template['subject']);
+        $user_mail_body = str_replace("{ambassador_email}", $email, $signup_email_template['body'] );
+        $user_mail_body = str_replace("{ambassador_password}", $password, $user_mail_body);
 
-        wp_mail(
+       $user_email_response = wp_mail(
             $email,
-            "You are Successfully Registered on " . get_bloginfo("name"),
-            "You are Successfully Registered on " .
-                get_bloginfo("name") .
-                ". Please wait for admin approval and code assignment."
+            $user_mail_subject,
+            $user_mail_body,
+            $headers
         );
         wp_redirect($_POST["redirect_url"]. '?message=Successfully Registered!&status=success');
     } else{

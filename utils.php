@@ -82,15 +82,15 @@ function get_user_earnings_table($user_id){
 
 
 function assign_code_to_user($user_id, $code, $status){
+    global $code_assignment_mail_template;
     $code = $status === STATUS_APPROVED ? $code : "";
     $status_update = update_user_meta($user_id, STATUS_META_KEY, $status);
     $code_update = update_user_meta($user_id, REFERRAL_CODE_META_KEY, $code);
     if($code && $code_update === true){
         $user = get_user_by( 'ID', $user_id );
         $user_email = $user->data->user_email;
-        $subject = "Account status updated on " . get_bloginfo("name");
-        $body = "Your account status updated to <b> " . $status . " </b> on " .
-        get_bloginfo("name") . ". Your Referral Code is <b>". $code ."<b/>";
+        $subject = $code_assignment_mail_template["subject"];
+        $body = str_replace("{code}", $code, $code_assignment_mail_template["body"]);
         $headers = array('Content-Type: text/html; charset=UTF-8');
         write_log($user_email);
         wp_mail(
