@@ -297,6 +297,7 @@ function as_user_registration(){
         "first_name" => $first_name,
         "last_name" => $last_name,
         "user_registered" => date("Y-m-d H:i:s"),
+        'role' => 'subscriber',
     ];
     $result = wp_insert_user($args);
 
