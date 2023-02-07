@@ -1,6 +1,6 @@
 <?php 
     if(!is_user_logged_in()){
-        wp_die('You are not allowed to access this page');
+        wp_redirect( wp_login_url() );
     }
 
     get_header();   
