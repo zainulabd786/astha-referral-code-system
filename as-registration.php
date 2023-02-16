@@ -217,3 +217,11 @@ function subscriber_redirect( $redirect_to, $request, $user ) {
 
     return $redirect_to;
 }
+
+function remove_menus(){
+    if(current_user_can('subscriber')){
+        remove_menu_page( 'index.php' ); //Remove Dashboard from menu
+    }
+  
+  }
+  add_action( 'admin_menu', 'remove_menus' );
