@@ -218,10 +218,20 @@ function subscriber_redirect( $redirect_to, $request, $user ) {
     return $redirect_to;
 }
 
+add_action( 'admin_menu', 'remove_menus' );
 function remove_menus(){
     if(current_user_can('subscriber')){
         remove_menu_page( 'index.php' ); //Remove Dashboard from menu
-    }
-  
-  }
-  add_action( 'admin_menu', 'remove_menus' );
+    }  
+}
+
+//remove all notices for all users except admins
+add_action(
+    'admin_notices',
+    function() {
+        if ( ! current_user_can( 'manage_options' ) ) {
+            remove_all_actions( 'admin_notices' );
+        }
+    },
+    0
+);
